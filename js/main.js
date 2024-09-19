@@ -1,29 +1,4 @@
-/* Stylesheet by Len M Kendall, 2024*/
-//Example 2.7 line 1
-function jsAjax(){
-    //use Fetch to retrieve data
-    fetch('data/MegaCities.geojson')
-        .then(function(response){
-            return response.json();
-        }) 
-        .then(callback) 
-};
-
-//define callback function
-function callback(response){
-    //tasks using the data go here
-    console.log(response)
-}
-
-window.onload = jsAjax();
-
-
-
-
-
-
-document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'Hello World!');
-
+/* LenKendall following lesson */
 //initialize function called when script loads
 function initialize(){
     cities();
@@ -31,58 +6,151 @@ function initialize(){
 
 //function to create a table with cities and their populations
 function cities(){
-    //define two arrays for cities and population
-    var cityPop = [
-    {
-        city: 'Madison',
-        population: 233209
-    },
-    {
-        city: 'Milwaukee',
-        population: 594833
-    },
-    {
-        city: 'Green Bay',
-        population: 104057
-    },
-    {
-        city: 'Superior',
-        population: 27244
-    }]
-
-    //create a table element
-    var table = document.createElement("table");
-
-    //create a header row
-    var headerRow = document.createElement("tr");
-
-    //add the "City" and "Population" columns to the header row
-    headerRow.insertAdjacentHTML('beforeend','<th>City</th><th>Population</th>')
-
-    //add the row to the table
-    table.appendChild(headerRow);
-   
-    //loop to add a new row for each city
-    for(var i = 0; i < cityPop.length; i++){
-        //assign longer html strings to a variable
-        var rowHtml = '<tr><td>' + cityPop[i].city + '</td><td>' + cityPop[i].population + '</td></tr>';
-        //add the row's html string to the table
-        table.insertAdjacentHTML('beforeend', rowHtml);
-    }
     
-    document.querySelector('#mydiv').appendChild(table);
+	//define two arrays for cities and population
+	var cityPop = [
+	{ 
+		city: 'Madison',
+		population: 233209
+	},
+	{
+		city: 'Milwaukee',
+		population: 594833
+	},
+	{
+		city: 'Green Bay',
+		population: 104057
+	},
+	{
+		city: 'Superior',
+		population: 27244
+	}];
+
+	//create a table element
+	var table = document.createElement("table");
+
+ 	//create a header row
+ 	var headerRow = document.createElement("tr");
+
+ 	//add the "City" and "Population" columns to the header row
+ 	headerRow.insertAdjacentHTML('beforeend','<th>City</th><th>Population</th>')
+
+ 	//add the row to the table
+ 	table.appendChild(headerRow);
+	
+ 	//loop to add a new row for each city
+ 	for(var i = 0; i < cityPop.length; i++){
+		 //create a new row
+		 var row = document.createElement("tr");
+
+		 //add city and population data to the row
+		 row.insertAdjacentHTML('beforeend', '<td>' + cityPop[i].city + '</td>' + '<td>' + cityPop[i].population + '</td>'
+		 );
+
+		 //add the row to the table
+		 table.appendChild(row);
+	}
+	//add the table to the div
+	document.querySelector('#mydiv').appendChild(table);
+
+	//call functions to add columns and events
+	addColumns(cityPop);
+	addEvents();
 
 }
 
-document.addEventListener('DOMContentLoaded', initialize)
-
-
-
-    //document.querySelector("#mydiv").appendChild(table);
-    //add the table to the div in index.html
-    //var myDiv = document.querySelector("#mydiv");
-    //myDiv.appendChild(table)
-
-//call the initialize function when the window has loaded
-//window.onload = initialize();
+// function to add a new column for city size
+function addColumns(cityPop) {
     
+    document.querySelectorAll("tr").forEach(function(row, i) {
+
+    	if (i == 0) {
+		
+    		row.insertAdjacentHTML('beforeend', '<th>CitySize</th>');
+    	} else {
+
+    		var citySize;
+
+    		if (cityPop[i-1].population < 100000){
+    			citySize = 'Small';
+
+    		} else if (cityPop[i-1].population < 500000){
+    			citySize = 'Medium';
+
+    		} else {
+    			citySize = 'Large';
+    		};
+			/* corrected spelling of adjacent */
+			row.insertAdjacentHTML('beforeend', '<td>' + citySize + '</td>');
+			
+		}
+
+	});
+
+}
+
+//Function to add event listeners
+
+function addEvents() {
+	//Mouseover event to change text color
+	document.querySelector("table").addEventListener("mouseover", function() {
+
+		var color = "rgb(";
+
+		for (var i = 0; i < 3; i++) {
+	
+			var random = Math.round(Math.random() * 255);
+			
+			color += random;
+		
+			if (i < 2) {
+				color += ",";
+		
+			} else {
+				color += ")";
+			}
+	
+		}
+		document.querySelector("table").style.color = color;
+	});
+
+	//click event to display an alert
+	function clickme() {
+		alert('Hey, you clicked me!'); 
+	}
+	
+	document.querySelector("table").addEventListener("click", clickme);
+}
+
+//Load the script when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initialize);
+
+//Fetch requests
+function jsAjax() {
+    //Step 1: Define the data request
+    var request = new Request('data/MegaCities.geojson');
+    //Step 2: define Fetch parameters
+    var init = {
+        meethod: 'GET'
+    }
+
+    //Step 3: use Fetch to retreive the data
+    fetch(request, init)
+    .then(conversion) //Step 4 convert data to usable form
+    .then(callback) //Step 5 Send retreived data to callback function
+};
+
+//define conversion callback function 
+function conversion(response) {
+    //convert data to usable form
+    return response.json();
+}
+
+//define callback function
+function callback(response) {
+    //tasks using the data go here
+    console.log(response)
+}
+
+window.onload = jsAjax(); 
+	
