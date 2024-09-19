@@ -125,6 +125,7 @@ function addEvents() {
 //Load the script when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initialize);
 
+
 //Fetch requests
 function jsAjax() {
     //basic fetch
@@ -150,5 +151,44 @@ function nextFunction(data){
 
 };
 
-window.onload = jsAjax(); 
+
+
+
+
+
+
+//creates debugAjax function for geojson
+function debugAjax(){
 	
+	var myData;
+	///fetches data
+	fetch("data/MegaCities.geojson")
+		.then(function(response){
+			debugCallback(response);
+        //defines myData
+        then(function(response) {
+            myData = response;
+
+            //check the data
+            console.log(myData)
+            
+        })
+
+        //check the data
+        console.log(myData)
+
+	})
+    // gets the data
+	document.querySelector("#mydiv").insertAdjacentHTML('beforeend', '<br>GeoJSON data:<br>' + JSON.stringify(myData))
+    //gets the date in usable form
+    document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))	
+
+};
+
+//define callback function 
+function debugCallback(response){
+    //tasks using date go here
+	document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))
+};
+
+window.onload = jsAjax(); 
