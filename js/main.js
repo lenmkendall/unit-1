@@ -131,7 +131,7 @@ function jsAjax() {
     var request = new Request('data/MegaCities.geojson');
     //Step 2: define Fetch parameters
     var init = {
-        meethod: 'GET'
+        method: 'GET'
     }
 
     //Step 3: use Fetch to retreive the data
