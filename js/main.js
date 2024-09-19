@@ -127,30 +127,28 @@ document.addEventListener('DOMContentLoaded', initialize);
 
 //Fetch requests
 function jsAjax() {
-    //Step 1: Define the data request
-    var request = new Request('data/MegaCities.geojson');
-    //Step 2: define Fetch parameters
-    var init = {
-        method: 'GET'
-    }
+    //basic fetch
+    fetch('data/MegaCities.geojson')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(callback) //send retreived data to a callback function
 
-    //Step 3: use Fetch to retreive the data
-    fetch(request, init)
-    .then(conversion) //Step 4 convert data to usable form
-    .then(callback) //Step 5 Send retreived data to callback function
 };
-
-//define conversion callback function 
-function conversion(response) {
-    //convert data to usable form
-    return response.json();
-}
 
 //define callback function
 function callback(response) {
-    //tasks using the data go here
-    console.log(response)
+
+    var myData = response;
+    //pass data to another function
+    nextFunction(myData);
+
 }
+
+function nextFunction(data){
+    console.log(data); //contains response data held by myData in callback
+
+};
 
 window.onload = jsAjax(); 
 	
