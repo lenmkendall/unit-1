@@ -1,4 +1,5 @@
 /* LenKendall following lesson */
+//Activity 3
 //initialize function called when script loads
 function initialize(){
     cities();
@@ -151,12 +152,7 @@ function nextFunction(data){
 
 };
 
-
-
-
-
-
-
+//Activity 4
 //creates debugAjax function for geojson
 function debugAjax(){
 	
@@ -164,31 +160,39 @@ function debugAjax(){
 	///fetches data
 	fetch("data/MegaCities.geojson")
 		.then(function(response){
-			debugCallback(response);
+            return response.json(); //parse the response as JSON
+        })
         //defines myData
-        then(function(response) {
-            myData = response;
+        .then(function(data) {
+            myData = data;
 
             //check the data
             console.log(myData)
+
+            //insert the data into HTML as a stringified version
+
+            document.querySelector('#mydiv').insertAdjacentHTML('beforeend', '<br>GeoJSON data:<br>' + JSON.stringify(myData));
+
+            //call the callback function and pass the data
+            debugCallback(myData);
             
         })
 
-        //check the data
-        console.log(myData)
+        .catch(function(error){
+            console.log("Error fetching GeoJSON", error);
+        })
 
-	})
-    // gets the data
-	document.querySelector("#mydiv").insertAdjacentHTML('beforeend', '<br>GeoJSON data:<br>' + JSON.stringify(myData))
-    //gets the date in usable form
-    document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))	
+	}
 
-};
+    // define the callback function
+    function debugCallback(data) {
+        //Use the data from the response and insert it into HTML
 
-//define callback function 
-function debugCallback(response){
-    //tasks using date go here
-	document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))
-};
+        document.querySelector('#mydiv').insertAdjacentHTML('beforeend', '<br>Callback GeoJSON data:<br>' + JSON.stringify(data));
+    }
 
-window.onload = jsAjax(); 
+	
+
+window.onload = function() {
+    debugAjax();
+}; 
